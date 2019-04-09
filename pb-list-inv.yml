@@ -1,0 +1,11 @@
+- name: List target IPs
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - include_tasks: "tasks/inv-gen/clean-inv.yml"
+    - include_tasks: "tasks/inv-gen/gen-aws-inv.yml"
+    - include_tasks: "tasks/inv-gen/gen-gcp-inv.yml"
+    - name: Refresh inventory
+      meta: refresh_inventory
+      

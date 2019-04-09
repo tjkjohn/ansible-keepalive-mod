@@ -1,0 +1,11 @@
+- name: Clear inventory
+  block:
+    - find:
+        paths: ./inventory
+        patterns: "*"
+      register: files_to_delete
+
+    - file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"

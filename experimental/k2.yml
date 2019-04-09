@@ -1,0 +1,11 @@
+- name: AWS EC2 instances
+  hosts: aws
+  vars:
+    ansible_user: ubuntu
+    ansible_ssh_private_key_file: ~/.pems/key-aws-maas-staging.pem
+
+- name: GCP instances
+  hosts: gcp
+  vars:
+    ansible_user: ubuntu
+    ansible_ssh_private_key_file: ~/.pems/maas-gcp-orchestrator-staging-ssh.pem

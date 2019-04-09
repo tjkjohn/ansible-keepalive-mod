@@ -1,0 +1,7 @@
+- name: Generate AWS inventory header
+  shell: echo "[aws]" >> ./inventory/aws
+
+- name: add entry
+  shell: "{{ item }}"
+  with_items:
+    - maas-cli aws all | grep -Ev 'IP|--|Completed|CloudFront' | cut -d"|" -f3 | grep -v "^[[:space:]]*$" >> ./inventory/aws
