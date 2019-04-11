@@ -1,0 +1,11 @@
+- name: Generate GCP inventory
+  shell: echo "[gcp]" >> ./inventory/gcp
+
+- name: Set region
+  set_fact:
+    gcp_region_target: '{{ gcp_region_target | replace(" ", "|") }}'
+
+- name: add entry  
+  shell: "{{ item }}"
+  with_items:
+    - maas-cli gcp all -f {{ gcp_profile }} | grep -E '{{gcp_region_target}}' | cut -d"|" -f3 | grep -Ev 'IP|Completed|---' >> ./inventory/gcp

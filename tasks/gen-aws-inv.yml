@@ -1,0 +1,11 @@
+- name: Generate AWS inventory header
+  shell: echo "[aws]" >> ./inventory/aws
+
+- name: Set region
+  set_fact:
+    aws_region_target: '{{ aws_region_target | replace(" ", "|") }}'
+
+- name: add entry
+  shell: "{{ item }}"
+  with_items:
+    - maas-cli aws all -p {{ aws_profile }} | grep -E '{{aws_region_target}}'| grep -Ev 'IP|--|Completed|CloudFront' | cut -d"|" -f3 | grep -v "^[[:space:]]*$" >> ./inventory/aws
