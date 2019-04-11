@@ -5,11 +5,17 @@
     - "./vars/{{ cfg_var }}.yml"
 
   tasks:
-    - include_tasks: "tasks/clean-inv.yml"
-    - include_tasks: "tasks/gen-aws-inv.yml"
+    - include_tasks: tasks/clean-inv.yml
+    - include_tasks: tasks/gen-aws-inv.yml
       when: '"aws" in cloud_target'
-    - include_tasks: "tasks/gen-gcp-inv.yml"
+    - include_tasks: tasks/gen-gcp-inv.yml
       when: '"gcp" in cloud_target'
     - name: Refresh inventory
       meta: refresh_inventory
-    - include_tasks: "tasks/disp-cfm-inv.yml"  
+    - include_tasks: tasks/disp-cfm-inv.yml
+    - include_tasks: tasks/update-sensu-keepalive-threshold.yml 
+      vars:
+        ssh_target: aws
+      when: '"aws" in cloud_target'
+    - include_tasks: tasks/update-sensu-keepalive-threshold.yml ssh_target=gcp
+      when: '"gcp" in cloud_target'

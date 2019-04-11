@@ -1,0 +1,12 @@
+---
+cloud_target: aws
+
+aws_region_target: ap-southeast-1
+aws_profile: staging
+aws_ssh_pem: ~/.pems/key-aws-maas-staging.pem
+aws_ssh_user: ubuntu
+
+gcp_region_target: us-central1 europe-west1
+gcp_profile: ~/.pems/maas-gcp-orchestrator-prod.json
+gcp_ssh_pem: ~/.pems/maas-gcp-orchestrator-prod.pem
+gcp_ssh_user: ubuntu

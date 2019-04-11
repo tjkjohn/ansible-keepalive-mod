@@ -1,0 +1,11 @@
+- name: "Setup ssh" 
+  set_fact:
+    ansible_user: '"{% if ssh_target=="aws" %} "{{ aws_ssh_user }}" 
+                    {% elif ssh_target=="gcp" %} "{{gcp_ssh_user}}" 
+                    {% endif %}'
+    ansible_ssh_private_key_file: '"{% if ssh_target=="aws" %} "{{ aws_ssh_pem }}" 
+                                    {% elif ssh_target=="gcp" %} "{{ gcp_ssh_pem }}" 
+                                    {% endif %}'
+
+- debug:
+    msg: "{{ssh_target}} : {{ansible_user}} : {{ansible_ssh_private_key_file}}"
