@@ -1,15 +1,15 @@
 - name: List target IPs
   hosts: localhost
   gather_facts: yes
-  vars_files:
-    - ./vars/config.yml
+  vars_files: 
+    - "./vars/{{ cfg_var }}.yml"
 
   tasks:
-    - include_tasks: "tasks/inv-gen/clean-inv.yml"
-    - include_tasks: "tasks/inv-gen/gen-aws-inv.yml"
+    - include_tasks: "tasks/clean-inv.yml"
+    - include_tasks: "tasks/gen-aws-inv.yml"
       when: '"aws" in cloud_target'
-    - include_tasks: "tasks/inv-gen/gen-gcp-inv.yml"
+    - include_tasks: "tasks/gen-gcp-inv.yml"
       when: '"gcp" in cloud_target'
     - name: Refresh inventory
       meta: refresh_inventory
-    - include_tasks: "tasks/inv-gen/disp-cfm-inv.yml"  
+    - include_tasks: "tasks/disp-cfm-inv.yml"  
