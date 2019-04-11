@@ -1,6 +1,6 @@
 - name: List target IPs
   hosts: localhost
-  gather_facts: yes
+  gather_facts: no
   vars_files: 
     - "./vars/{{ cfg_var }}.yml"
 
@@ -12,10 +12,32 @@
       when: '"gcp" in cloud_target'
     - name: Refresh inventory
       meta: refresh_inventory
+
+- name: Execute
+  hosts: all
+  gather_facts: no
+  become: yes
+  vars_files: 
+    - "./vars/{{ cfg_var }}.yml"
+
+  tasks:
     - include_tasks: tasks/disp-cfm-inv.yml
     - include_tasks: tasks/update-sensu-keepalive-threshold.yml 
       vars:
         ssh_target: aws
+        ssh_user: "{{aws_ssh_user}}"
+        ssh_pem: "{{aws_ssh_pem}}"
       when: '"aws" in cloud_target'
-    - include_tasks: tasks/update-sensu-keepalive-threshold.yml ssh_target=gcp
+    - include_tasks: tasks/update-sensu-keepalive-threshold.yml
+      vars:
+        ssh_target: gcp
+        ssh_user: "{{gcp_ssh_user}}"
+        ssh_pem: "{{gcp_ssh_pem}}"
       when: '"gcp" in cloud_target'
+
+  handlers:
+    - name: restart sensu-client
+      service:
+        name: sensu-client
+        state: restarted
+      listen: "restart services"

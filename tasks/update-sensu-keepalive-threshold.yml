@@ -1,11 +1,49 @@
-- name: "Setup ssh" 
+- name: "Setup ssh"
   set_fact:
-    ansible_user: '"{% if ssh_target=="aws" %} "{{ aws_ssh_user }}" 
-                    {% elif ssh_target=="gcp" %} "{{gcp_ssh_user}}" 
-                    {% endif %}'
-    ansible_ssh_private_key_file: '"{% if ssh_target=="aws" %} "{{ aws_ssh_pem }}" 
-                                    {% elif ssh_target=="gcp" %} "{{ gcp_ssh_pem }}" 
-                                    {% endif %}'
+    ansible_user: "{{ssh_user}}"
+    ansible_ssh_private_key_file: "{{ssh_pem}}"
 
 - debug:
     msg: "{{ssh_target}} : {{ansible_user}} : {{ansible_ssh_private_key_file}}"
+
+- name: Get ownership before update
+  stat:
+    path: /etc/sensu/conf.d/client.json
+  register: st_before
+
+- name: Actual attempt to change the threshold values
+  ghetto_json:
+    path=/etc/sensu/conf.d/client.json
+    client.keepalive.thresholds.warning=90
+    client.keepalive.thresholds.critical=120
+
+- name: Get ownership after update
+  stat:
+    path: /etc/sensu/conf.d/client.json
+  register: st_after
+
+- name: Check if file ownership has changed
+  fail:
+    msg: "Yikes, file ownership has changed!"
+  when: st_before.stat.pw_name != st_after.stat.pw_name
+
+- name: Restart sensu-client
+  command: echo "Restarting sensu-client service"
+  notify: "restart services"
+
+- service_facts:
+  command: echo "Get service state"
+  register: service_state
+
+- name: Check if service restart is successful
+  fail:
+    msg: "Sensu-client failed to restart!"
+  when: service_state.changed != true
+
+  #handlers:
+  #- name: restart sensu-client
+  #  service:
+  #    name: sensu-client
+  #    state: restarted
+  #  listen: "restart services"
+

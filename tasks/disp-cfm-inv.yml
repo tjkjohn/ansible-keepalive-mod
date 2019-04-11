@@ -1,8 +1,6 @@
 - name: List target IPs and confirm
   debug:
-    msg: "Target IP: {{ item }}"
-  with_inventory_hostnames:
-    - all   
+    msg: "Target IP"
 
 - pause:
     prompt: "Do you wish to proceed? (yes/no)"
