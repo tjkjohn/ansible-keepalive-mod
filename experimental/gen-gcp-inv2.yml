@@ -1,5 +1,0 @@
-- name: Generate GCP inventory
-  shell: "{{ item }}"
-  with_items:
-    - echo "[gcp]" >> ./inventory/gcp
-    - maas-cli gcp all -f ~/.pems/maas-gcp-orchestrator-prod.json | cut -d"|" -f3 | grep -Ev 'IP|---' >> ./inventory/gcp

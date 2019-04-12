@@ -3,9 +3,9 @@
     msg: "Target IP"
 
 - pause:
-    prompt: "Do you wish to proceed? (yes/no)"
+    prompt: 'Do you wish to proceed? ("yes" to proceed/any other input to abort)'
   register: var_proceed
 
 - meta: end_play
-  when: var_proceed.user_input == "no"
+  when: var_proceed.user_input != "yes"
 
