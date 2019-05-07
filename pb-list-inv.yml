@@ -10,6 +10,8 @@
       when: '"aws" in cloud_target'
     - include_tasks: tasks/gen-gcp-inv.yml
       when: '"gcp" in cloud_target'
+    - name: Refresh inventory
+      meta: refresh_inventory
 
 - name: Execute
   hosts: all
@@ -37,15 +39,5 @@
     - name: restart sensu-client
       service:
         name: sensu-client
-        state: restarted
-      listen: "restart sensu services"
-    - name: restart sensu-api
-      service:
-        name: sensu-api
-        state: restarted
-      listen: "restart sensu services"
-    - name: restart sensu-server
-      service:
-        name: sensu-server
         state: restarted
       listen: "restart sensu services"
