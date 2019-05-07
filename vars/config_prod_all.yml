@@ -5,6 +5,7 @@ aws_region_target: us-east-1 us-east-2 us-west-2 ap-southeast-1 ap-southeast-2 e
 aws_profile: production
 aws_ssh_pem: ~/.pems/key-aws-maas-prod.pem
 aws_ssh_user: ubuntu
+aws_custom_filter: 
 
 gcp_region_target: us-central1 europe-west1
 gcp_profile: ~/.pems/maas-gcp-orchestrator-prod.json

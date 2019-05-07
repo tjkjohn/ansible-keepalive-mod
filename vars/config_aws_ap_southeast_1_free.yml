@@ -1,0 +1,11 @@
+---
+cloud_target: aws
+
+aws_region_target: ap-southeast-1
+aws_profile: production
+aws_ssh_pem: ~/.pems/key-aws-maas-prod.pem
+aws_ssh_user: ubuntu
+aws_custom_filter: free-
+
+sensu_threshold_warning: 90
+sensu_threshold_critical: 120

@@ -8,4 +8,4 @@
 - name: add entry
   shell: "{{ item }}"
   with_items:
-    - maas-cli aws all -p {{ aws_profile }} | grep -E '{{aws_region_target}}'| grep -Ev 'IP|--|Completed|CloudFront' | cut -d"|" -f3 | grep -v "^[[:space:]]*$" >> ./inventory/aws
+    - maas-cli aws all -p {{ aws_profile }} | grep -E '{{aws_region_target}}'| grep -Ev 'IP|--|Completed|CloudFront' | grep -E '{{aws_custom_filter}}' | cut -d"|" -f3 | grep -v "^[[:space:]]*$" >> ./inventory/aws
